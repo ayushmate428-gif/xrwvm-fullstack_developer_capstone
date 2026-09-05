@@ -14,7 +14,7 @@ lint-python:
 name: Lint Python Files
 runs-on: ubuntu-latest
 
-```
+
 steps:
   - name: Checkout repository
     uses: actions/checkout@v4
@@ -31,13 +31,13 @@ steps:
 
   - name: Run flake8
     run: flake8 server
-```
+
 
 lint-javascript:
 name: Lint JavaScript Files
 runs-on: ubuntu-latest
 
-```
+
 steps:
   - name: Checkout repository
     uses: actions/checkout@v4
@@ -57,4 +57,3 @@ steps:
   - name: Run JSHint
     working-directory: server/frontend
     run: jshint src
-```
