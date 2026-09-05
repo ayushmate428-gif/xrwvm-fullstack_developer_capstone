@@ -13,6 +13,7 @@ from django.contrib.auth import login, authenticate
 import logging
 import json
 from django.views.decorators.csrf import csrf_exempt
+from .restapis import get_request, analyze_review_sentiments, post_review
 # from .populate import initiate
 
 
@@ -37,6 +38,29 @@ def login_user(request):
         login(request, user)
         data = {"userName": username, "status": "Authenticated"}
     return JsonResponse(data)
+
+
+def get_dealer_reviews(request, dealer_id):
+    if dealer_id:
+        endpoint = "/fetchReviews/dealer/" + str(dealer_id)
+        reviews = get_request(endpoint)
+
+        for review_detail in reviews:
+            try:
+                response = analyze_review_sentiments(review_detail["review"])
+                review_detail["sentiment"] = response["sentiment"]
+            except Exception:
+                review_detail["sentiment"] = "neutral"
+
+        return JsonResponse({
+            "status": 200,
+            "reviews": reviews
+        })
+
+    return JsonResponse({
+        "status": 400,
+        "message": "Bad Request"
+    })
 
 # Create a `logout_request` view to handle sign out request
 # def logout_request(request):
